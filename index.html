@@ -90,7 +90,8 @@ body {
 
 <script>
 // Data di apertura
-const unlockTime = new Date(2025, 12, 25, 0, 0, 0).getTime(); // modifica data se serve
+// Timestamp in millisecondi di 25 dicembre 2025 00:00 ora locale
+const unlockTime = new Date("2025-12-25T00:00:00+01:00").getTime();
 
 const giftClosed = document.getElementById("gift-closed");
 const giftOpen = document.getElementById("gift-open");
@@ -155,6 +156,7 @@ giftClosed.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
