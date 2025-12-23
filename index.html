@@ -10,6 +10,7 @@ body {
     text-align: center;
     padding: 40px;
     background: #fdf6e3;
+    overflow-x: hidden;
 }
 
 #gift-box h2 {
@@ -39,12 +40,38 @@ body {
     transform: scale(0.8);
     transition: transform 0.8s ease;
 }
+
+#countdown {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #555;
+}
+
+/* Scintille natalizie */
+.sparkle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: gold;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: sparkleAnim 1s linear infinite;
+}
+
+@keyframes sparkleAnim {
+    0% {transform: translateY(0) scale(1); opacity: 1;}
+    50% {transform: translateY(-20px) scale(1.5); opacity: 0.5;}
+    100% {transform: translateY(-40px) scale(0); opacity: 0;}
+}
 </style>
 </head>
 <body>
 <div id="gift-box">
     <h2>🎁 Un dono speciale</h2>
     <p id="gift-message">Il tuo biglietto da visita digitale si aprirà a mezzanotte 🎄</p>
+
+    <div id="countdown"></div>
 
     <!-- Borlotto chiuso -->
     <div id="gift-closed">🎁</div>
@@ -62,44 +89,69 @@ body {
 </div>
 
 <script>
-(function() {
-    const unlockTime = new Date("2025-12-25T00:00:00").getTime(); // modifica data se vuoi
-    const now = new Date().getTime();
+// Data di apertura
+const unlockTime = new Date("2025-12-25T00:00:00").getTime(); // modifica data se serve
 
-    const giftClosed = document.getElementById("gift-closed");
-    const giftOpen = document.getElementById("gift-open");
-    const giftMessage = document.getElementById("gift-message");
-    const giftImg = document.getElementById("gift-img");
+const giftClosed = document.getElementById("gift-closed");
+const giftOpen = document.getElementById("gift-open");
+const giftMessage = document.getElementById("gift-message");
+const giftImg = document.getElementById("gift-img");
+const countdownEl = document.getElementById("countdown");
 
-    function openGift() {
-        giftClosed.style.transform = "scale(1.3) rotate(10deg)";
+// Funzione apertura regalo con scintille
+function openGift() {
+    giftClosed.style.transform = "scale(1.3) rotate(10deg)";
+    createSparkles(50); // 50 scintille
+
+    setTimeout(() => {
+        giftClosed.style.display = "none";
+        giftMessage.style.display = "none";
+        countdownEl.style.display = "none";
+        giftOpen.style.display = "block";
         setTimeout(() => {
-            giftClosed.style.display = "none";
-            giftMessage.style.display = "none";
-            giftOpen.style.display = "block";
-            setTimeout(() => {
-                giftOpen.style.opacity = 1;
-                giftOpen.style.transform = "translateY(0)";
-                giftImg.style.transform = "scale(1)";
-            }, 50);
-        }, 700);
-    }
+            giftOpen.style.opacity = 1;
+            giftOpen.style.transform = "translateY(0)";
+            giftImg.style.transform = "scale(1)";
+        }, 50);
+    }, 700);
+}
 
-    if(now >= unlockTime){
+// Funzione countdown
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = unlockTime - now;
+
+    if(distance <= 0){
         openGift();
+        clearInterval(countdownInterval);
     } else {
-        giftClosed.addEventListener("click", () => {
-            alert("Non ancora! Il biglietto si aprirà a mezzanotte 🎄");
-        });
-
-        setInterval(() => {
-            const current = new Date().getTime();
-            if(current >= unlockTime){
-                openGift();
-            }
-        }, 30000);
+        const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+        const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+        const seconds = Math.floor((distance % (1000*60)) / 1000);
+        countdownEl.innerHTML = `Apertura tra: ${hours}h ${minutes}m ${seconds}s`;
     }
-})();
+}
+
+// Funzione scintille
+function createSparkles(number){
+    for(let i=0; i<number; i++){
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = Math.random() * window.innerWidth + "px";
+        sparkle.style.top = Math.random() * window.innerHeight/2 + "px";
+        document.body.appendChild(sparkle);
+        setTimeout(()=>{ sparkle.remove(); }, 2000 + Math.random()*1000);
+    }
+}
+
+// Aggiorna countdown ogni secondo
+const countdownInterval = setInterval(updateCountdown, 1000);
+updateCountdown(); // iniziale
+
+// Click prima di mezzanotte
+giftClosed.addEventListener("click", () => {
+    alert("Non ancora! Il biglietto si aprirà a mezzanotte 🎄");
+});
 </script>
 </body>
 </html>
