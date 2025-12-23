@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un pensiero per te 🎁</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+    background: #fdf6e3;
+}
+
+#gift-box h2 {
+    margin-bottom: 20px;
+    color: #1fa855;
+}
+
+#gift-closed {
+    display: inline-block;
+    font-size: 80px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+#gift-open {
+    display: none;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+#gift-open img {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    transform: scale(0.8);
+    transition: transform 0.8s ease;
+}
+</style>
+</head>
+<body>
+<div id="gift-box">
+    <h2>🎁 Un dono speciale</h2>
+    <p id="gift-message">Il tuo biglietto da visita digitale si aprirà a mezzanotte 🎄</p>
+
+    <!-- Borlotto chiuso -->
+    <div id="gift-closed">🎁</div>
+
+    <!-- Biglietto aperto -->
+    <div id="gift-open">
+        <h3>Buon Natale! ✨</h3>
+        <p>Ecco il tuo biglietto digitale con QR code:</p>
+
+        <img src="https://dl.dropboxusercontent.com/scl/fi/p9lc2eiizhfw9dky7y3ri/Biglietto.PNG" 
+             alt="Biglietto da visita con QR code" id="gift-img">
+
+        <p style="font-size:0.9em; color:#555;">Scansiona il QR code per scoprire il tuo regalo 🎁</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    const unlockTime = new Date("2025-12-25T00:00:00").getTime(); // modifica data se vuoi
+    const now = new Date().getTime();
+
+    const giftClosed = document.getElementById("gift-closed");
+    const giftOpen = document.getElementById("gift-open");
+    const giftMessage = document.getElementById("gift-message");
+    const giftImg = document.getElementById("gift-img");
+
+    function openGift() {
+        giftClosed.style.transform = "scale(1.3) rotate(10deg)";
+        setTimeout(() => {
+            giftClosed.style.display = "none";
+            giftMessage.style.display = "none";
+            giftOpen.style.display = "block";
+            setTimeout(() => {
+                giftOpen.style.opacity = 1;
+                giftOpen.style.transform = "translateY(0)";
+                giftImg.style.transform = "scale(1)";
+            }, 50);
+        }, 700);
+    }
+
+    if(now >= unlockTime){
+        openGift();
+    } else {
+        giftClosed.addEventListener("click", () => {
+            alert("Non ancora! Il biglietto si aprirà a mezzanotte 🎄");
+        });
+
+        setInterval(() => {
+            const current = new Date().getTime();
+            if(current >= unlockTime){
+                openGift();
+            }
+        }, 30000);
+    }
+})();
+</script>
+</body>
+</html>
