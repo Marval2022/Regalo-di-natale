@@ -69,7 +69,7 @@ body {
 <body>
 <div id="gift-box">
    <h2>🎁 Un dono speciale</h2>
-   <p id="gift-message">Il tuo biglietto da visita digitale si aprirà a mezzanotte 🎄</p>
+   <p id="gift-message">Il tuo regalo digitale fatto col cuore si aprirà a mezzanotte 🎄</p>
 
    <div id="countdown"></div>
 
@@ -154,7 +154,7 @@ updateCountdown();
 giftClosed.addEventListener("click", () => {
    // Controllo aggiuntivo per sicurezza
    if (new Date().getTime() < unlockTime) {
-       alert("Non ancora! Il biglietto si aprirà a mezzanotte tra il 24 e il 25 🎄");
+       alert("Non ancora! Il regalo si aprirà a mezzanotte tra il 24 e il 25 🎄");
    } else {
        openGift();
    }
@@ -162,6 +162,7 @@ giftClosed.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
